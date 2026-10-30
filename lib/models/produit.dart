@@ -5,40 +5,49 @@ class Produit {
   final double prix;
   final int quantite;
   final bool disponible;
-  final String dateAjout;
+  final DateTime dateAjout;
   final int categorieId;
 
-  Produit({
+  const Produit({
     this.id,
     required this.nom,
     required this.prix,
-    required this.quantite,
-    required this.disponible,
+    this.quantite = 0,
+    this.disponible = true,
     required this.dateAjout,
     required this.categorieId,
   });
 
+  // Ligne de la base (Map) → objet Dart
+  factory Produit.fromMap(Map<String, dynamic> map) {
+    return Produit(
+      id: map['id'] as int?,
+      nom: map['nom'] as String,
+      prix: (map['prix'] as num).toDouble(),
+      quantite: map['quantite'] as int,
+      disponible: map['disponible'] == 1,
+      dateAjout: DateTime.parse(map['date_ajout'] as String),
+      categorieId: map['categorie_id'] as int,
+    );
+  }
+
+  // Objet Dart → ligne de la base (Map)
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      if (id != null) 'id': id,
       'nom': nom,
       'prix': prix,
       'quantite': quantite,
       'disponible': disponible ? 1 : 0,
-      'dateAjout': dateAjout,
-      'categorieId': categorieId,
+      'date_ajout': dateAjout.toIso8601String(),
+      'categorie_id': categorieId,
     };
   }
 
-  factory Produit.fromMap(Map<String, dynamic> map) {
-    return Produit(
-      id: map['id'],
-      nom: map['nom'],
-      prix: (map['prix'] as num).toDouble(),
-      quantite: map['quantite'],
-      disponible: map['disponible'] == 1,
-      dateAjout: map['dateAjout'],
-      categorieId: map['categorieId'],
-    );
+  @override
+  String toString() {
+    return 'Produit(id: $id, nom: $nom, prix: $prix, '
+        'quantite: $quantite, disponible: $disponible, '
+        'dateAjout: $dateAjout, categorieId: $categorieId)';
   }
 }

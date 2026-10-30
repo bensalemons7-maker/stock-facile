@@ -1,22 +1,16 @@
+
 class Categorie {
   final int? id;
   final String nom;
   final String? description;
 
-  Categorie({
+  const Categorie({
     this.id,
     required this.nom,
     this.description,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'nom': nom,
-      'description': description,
-    };
-  }
-
+  // Ligne de la base (Map) → objet Dart
   factory Categorie.fromMap(Map<String, dynamic> map) {
     return Categorie(
       id: map['id'] as int?,
@@ -24,4 +18,16 @@ class Categorie {
       description: map['description'] as String?,
     );
   }
+
+  // Objet Dart → ligne de la base (Map)
+  Map<String, dynamic> toMap() {
+    return {
+      if (id != null) 'id': id,
+      'nom': nom,
+      'description': description,
+    };
+  }
+
+  @override
+  String toString() => 'Categorie(id: $id, nom: $nom)';
 }
